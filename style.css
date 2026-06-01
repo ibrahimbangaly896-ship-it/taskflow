@@ -1,0 +1,97 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f2f5;
+  text-align: center;
+  margin-top: 50px;
+}
+
+h1 {
+  color: #333;
+}
+
+input {
+  padding: 10px;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px;
+  margin-left: 5px;
+  border: none;
+  background: #1877f2;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #145dbf;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style: none;
+  background: white;
+  margin: 10px auto;
+  padding: 10px;
+  width: 300px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.done {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+main {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  width: 320px;
+}
+li {
+  animation: slide 0.3s ease;
+}
+@keyframes slide {
+
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+.done {
+  text-decoration: line-through;
+  opacity: 0.5;
+  background: #d4edda;
+}
+}
+.actions {
+  display: flex;
+  gap: 5px;
+}
+.dark {
+  background: #1e1e1e;
+  color: white;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>TaskFlow</title>
+
+  <!-- 🔗 Lien vers le style (IMPORTANT) -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<button onclick="toggleDarkMode()">
+  🌙 Mode sombre
+</button>
+  <h1>TaskFlow 🚀</h1>
+
+  <!-- Zone pour écrire une tâche -->
+  <input id="taskInput" placeholder="Ajouter une tâche">
+
+  <!-- Bouton ajouter -->
+  <button onclick="clearTasks()">Tout supprimer</button>
+  <button onclick="addTask()">Ajouter</button>
+
+  <p id="taskCount">Tu as 0 tâche</p>
+  <p id="doneCount"></p>
+  <!-- Liste des tâches -->
+  <select id="filter">
+
+  <option value="all">Toutes</option>
+
+  <option value="done">Terminées</option>
+
+  <option value="todo">À faire</option>
+
+</select>
+  <ul id="taskList"></ul>
+
+  <!-- Script JavaScript -->
+  <script src="script.js"></script>
+
+</body>
+</html>
