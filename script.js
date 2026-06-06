@@ -1,149 +1,187 @@
-// Charger les tâches depuis la mémoire du navigateur
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-// Sauvegarder les tâches
-function saveTasks() {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+// =========================
+// DARK MODE
+// =========================
+function toggleDarkMode() {
+  document.body.classList.toggle("dark");
 }
 
-// Ajouter une tâche
+// =========================
+// AJOUTER UNE TÂCHE
+// =========================
 function addTask() {
-  let input = document.getElementById("taskInput");
+  const input = document.getElementById("taskInput");
+  const category = document.getElementById("category");
+  const notification = document.getElementById("notification");
 
-  if (input.value === "") return;
-input.focus();
+  const text = input.value.trim();
+
+  // VALIDATION
+  if (text === "") {
+    notification.innerText = "⚠️ Tu dois écrire une tâche !";
+    return;
+  }
+
+  if (text.length < 3) {
+    notification.innerText = "⚠️ Minimum 3 caractères";
+    return;
+  }
+
+  notification.innerText = "";
 
   tasks.push({
+    text: text,
+    category: category.value,
+    completed: false
+  });
 
-  text: input.value,
-
-  done: false,
-
-  date: new Date().toLocaleDateString()
-
-});
   input.value = "";
 
-  saveTasks();
-  renderTasks();
+  saveAndRender();
 }
 
-// Afficher les tâches
+// =========================
+// SUPPRIMER TOUT
+// =========================
+function clearTasks() {
+  tasks = [];
+  saveAndRender();
+}
+
+// =========================
+// TOGGLE DONE
+// =========================
+function toggleTask(index) {
+  tasks[index].completed = !tasks[index].completed;
+  saveAndRender();
+}
+
+// =========================
+// SUPPRIMER UNE TÂCHE
+// =========================
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  saveAndRender();
+}
+
+// =========================
+// FILTRAGE + AFFICHAGE
+// =========================
 function renderTasks() {
-  let list = document.getElementById("taskList");
+  const list = document.getElementById("taskList");
+  const filter = document.getElementById("filter").value;
+
   list.innerHTML = "";
 
- document.getElementById("taskCount").innerHTML =
-  `Tu as ${tasks.length} tâche(s)`;
-  let doneTasks = tasks.filter(task => task.done);
+  let filteredTasks = tasks;
 
-document.getElementById("doneCount").innerHTML =
-  `${doneTasks.length} tâche(s) terminée(s)`;
-  let filter = document.getElementById("filter").value;
+  if (filter === "done") {
+    filteredTasks = tasks.filter(t => t.completed);
+  } else if (filter === "todo") {
+    filteredTasks = tasks.filter(t => !t.completed);
+  }
 
-tasks.forEach((task, index) => {
+  filteredTasks.forEach((task, index) => {
+    const li = document.createElement("li");
 
-  if (filter === "done" && !task.done) return;
-
-  if (filter === "todo" && task.done) return;
-    let li = document.createElement("li");
-
-    if (task.done) {
-  li.classList.add("done");
-}
     li.innerHTML = `
-     <span>
-        ${task.text}
-        <br>
-<small>${task.date}</small>
-      </span>
-      
-      <div class="actions">
+  <span class="${task.completed ? "done" : ""}">
+    ${task.text} (${task.category})
+  </span>
 
-  <button onclick="toggleTask(${index})">✔️</button>
-
+  <button onclick="toggleTask(${index})">✔</button>
   <button onclick="editTask(${index})">✏️</button>
-
   <button onclick="deleteTask(${index})">❌</button>
-
-</div>
 `;
 
     list.appendChild(li);
   });
+
+  updateStats();
 }
 
-// Supprimer une tâche
-function deleteTask(index) {
+// =========================
+// RECHERCHE
+// =========================
+document.getElementById("searchInput").addEventListener("input", function () {
+  const value = this.value.toLowerCase();
+  const items = document.querySelectorAll("#taskList li");
 
-  let confirmation = confirm("Supprimer cette tâche ?");
+  items.forEach(item => {
+    item.style.display =
+      item.textContent.toLowerCase().includes(value)
+        ? "flex"
+        : "none";
+  });
+});
 
-  if (confirmation === true) {
+// =========================
+// STATS + BARRE
+// =========================
+function updateStats() {
+  const total = tasks.length;
+  const done = tasks.filter(t => t.completed).length;
 
-    tasks.splice(index, 1);
+  document.getElementById("taskCount").innerText =
+    `Tu as ${total} tâche(s)`;
 
-    saveTasks();
-    renderTasks();
+  document.getElementById("doneCount").innerText =
+    `${done} terminée(s)`;
 
-  }
+  const percent = total === 0 ? 0 : (done / total) * 100;
 
+  document.getElementById("progressBar").style.width =
+    percent + "%";
 }
 
-// Marquer comme terminé
-function toggleTask(index) {
-  tasks[index].done = !tasks[index].done;
-  saveTasks();
+// =========================
+// SAUVEGARDE
+// =========================
+function saveAndRender() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
   renderTasks();
 }
 
-// Afficher les tâches au démarrage
-renderTasks();
-document
-  .getElementById("taskInput")
-  .addEventListener("keydown", function(event) {
+// =========================
+// FILTRE CHANGE
+// =========================
+document.getElementById("filter").addEventListener("change", renderTasks);
 
-    if (event.key === "Enter") {
+// =========================
+// INIT
+// =========================
+renderTasks();
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("taskInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
       addTask();
     }
-
   });
-  document
-  .getElementById("filter")
-  .addEventListener("change", renderTasks);
-  function clearTasks() {
+});
+function editTask(index) {
+  const newText = prompt("Modifier la tâche :", tasks[index].text);
 
-  let confirmation = confirm("Supprimer toutes les tâches ?");
+  if (newText === null) return; // annuler
 
-  if (confirmation === true) {
+  const trimmed = newText.trim();
 
-    tasks = [];
-
-    saveTasks();
-
-    renderTasks();
-
-  }
-}
-  function editTask(index) {
-
-  let newText = prompt(
-    "Modifier la tâche :",
-    tasks[index].text
-  );
-
-  if (newText !== null && newText.trim() !== "") {
-
-    tasks[index].text = newText;
-
-    saveTasks();
-
-    renderTasks();
-
+  if (trimmed === "") {
+    alert("La tâche ne peut pas être vide !");
+    return;
   }
 
+  if (trimmed.length < 3) {
+    alert("Minimum 3 caractères !");
+    return;
+  }
+
+  tasks[index].text = trimmed;
+
+  saveAndRender();
 }
-function toggleDarkMode() {
-
-  document.body.classList.toggle("dark");
-
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js")
+    .then(() => console.log("SW enregistré"))
+    .catch(err => console.log("Erreur SW", err));
 }

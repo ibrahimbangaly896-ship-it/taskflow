@@ -2,40 +2,99 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TaskFlow</title>
 
-  <!-- 🔗 Lien vers le style (IMPORTANT) -->
+  <link
+    rel="icon"
+    href="https://cdn-icons-png.flaticon.com/512/1828/1828919.png"
+  />
+
+  <link rel="manifest" href="manifest.json">
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-<button onclick="toggleDarkMode()">
-  🌙 Mode sombre
-</button>
-  <h1>TaskFlow 🚀</h1>
 
-  <!-- Zone pour écrire une tâche -->
-  <input id="taskInput" placeholder="Ajouter une tâche">
+  <button onclick="toggleDarkMode()">
+    🌙 Mode sombre
+  </button>
 
-  <!-- Bouton ajouter -->
-  <button onclick="clearTasks()">Tout supprimer</button>
-  <button onclick="addTask()">Ajouter</button>
+  <h1 class="logo">
+    ✅ TaskFlow
+  </h1>
 
-  <p id="taskCount">Tu as 0 tâche</p>
+  <!-- Recherche -->
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Rechercher une tâche 🔎"
+  >
+
+  <!-- Nouvelle tâche -->
+  <input
+    id="taskInput"
+    placeholder="Ajouter une tâche"
+  >
+
+  <!-- Catégorie -->
+  <select id="category">
+
+    <option value="Travail">Travail</option>
+
+    <option value="Maison">Maison</option>
+
+    <option value="École">École</option>
+
+    <option value="Personnel">Personnel</option>
+
+  </select>
+
+  <!-- Boutons -->
+  <button onclick="addTask()">
+    Ajouter
+  </button>
+
+  <button onclick="clearTasks()">
+    Tout supprimer
+  </button>
+
+  <!-- Compteurs -->
+  <p id="taskCount">
+    Tu as 0 tâche
+  </p>
+
   <p id="doneCount"></p>
-  <!-- Liste des tâches -->
+
+  <!-- Barre de progression -->
+  <div id="progressContainer">
+    <div id="progressBar"></div>
+  </div>
+
+  <!-- Notifications -->
+  <p id="notification"></p>
+
+  <!-- Filtre -->
   <select id="filter">
 
-  <option value="all">Toutes</option>
+    <option value="all">
+      Toutes
+    </option>
 
-  <option value="done">Terminées</option>
+    <option value="done">
+      Terminées
+    </option>
 
-  <option value="todo">À faire</option>
+    <option value="todo">
+      À faire
+    </option>
 
-</select>
+  </select>
+
+  <!-- Liste -->
   <ul id="taskList"></ul>
 
-  <!-- Script JavaScript -->
   <script src="script.js"></script>
 
 </body>
